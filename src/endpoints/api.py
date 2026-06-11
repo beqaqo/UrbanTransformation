@@ -1,9 +1,14 @@
-from flask_restx import Namespace, Resource
+from flask_restx import Resource
+
 from src.models.member import Member
 from src.models.activity import Activity
+from src.models.slider import Slider
+from src.ext import api
+from src.endpoints.models import activity_model, slider_model
 
-ns_members = Namespace("members", path="/api/members")
-ns_activities = Namespace("activities", path="/api/activities")
+ns_members = api.namespace("members", path="/api/members")
+ns_activities = api.namespace("activities", path="/api/activities")
+ns_slider = api.namespace("slider", path="/api/slider")
 
 @ns_members.route("/")
 class MemberList(Resource):
@@ -14,11 +19,14 @@ class MemberList(Resource):
                 "id": m.id,
                 "name": m.name,
                 "surname": m.surname,
+                "role": m.role,
+                "academical_degree": m.academical_degree,
                 "contribution": m.contribution,
                 "image": m.image,
                 "email": m.email
             } for m in members
         ]
+
 
 @ns_members.route("/<int:id>")
 class MemberDetail(Resource):
@@ -28,33 +36,32 @@ class MemberDetail(Resource):
             "id": m.id,
             "name": m.name,
             "surname": m.surname,
+            "role": m.role,
+            "academical_degree": m.academical_degree,
             "contribution": m.contribution,
             "image": m.image,
             "email": m.email
         }
 
+
 @ns_activities.route("/")
 class ActivityList(Resource):
+    @ns_activities.marshal_with(activity_model)
     def get(self):
         activities = Activity.query.all()
-        return [
-            {
-                "id": a.id,
-                "title": a.title,
-                "description": a.description,
-                "DateTime": a.DateTime,
-                "Time": a.Time
-            } for a in activities
-        ]
+        return activities
 
 @ns_activities.route("/<int:id>")
 class ActivityDetail(Resource):
+    @ns_activities.marshal_with(activity_model)
     def get(self, id):
         a = Activity.query.get_or_404(id)
-        return {
-            "id": a.id,
-            "title": a.title,
-            "description": a.description,
-            "DateTime": a.DateTime,
-            "Time": a.Time
-        }
+        return a
+
+
+@ns_slider.route("/")
+class SliderList(Resource):
+    @ns_slider.marshal_with(slider_model)
+    def get(self):
+        sliders = Slider.query.filter_by(show=True).all()
+        return sliders

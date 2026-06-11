@@ -2,11 +2,11 @@ from flask import Flask
 from src.ext import db, migrate, login_manager, admin, api, babel
 from src.config import Config
 from src.commands import init_db, populate_db
-from src.models import Activity, Member, User
+from src.models import Activity, Member, User, Slider
 from src.admin_views.base import SecureModelView, SecureIndexView
-from src.views import auth_blueprint, ns_members, ns_activities
-from src.admin_views.activity_view import ActivityView
-from src.admin_views.member_view import MemberView
+from src.endpoints import MemberDetail, MemberList, ActivityList, ActivityDetail, SliderList
+from src.views import auth_blueprint
+from src.admin_views import ActivityView, MemberView, SliderView
 
 
 COMMANDS = [init_db, populate_db]
@@ -28,9 +28,8 @@ def register_extensions(app):
     admin.add_view(SecureModelView(User, db.session))
     admin.add_view(ActivityView(Activity, db.session))
     admin.add_view(MemberView(Member, db.session))
+    admin.add_view(SliderView(Slider, db.session))
 
-    api.add_namespace(ns_members)
-    api.add_namespace(ns_activities)
     api.init_app(app)
 
 
