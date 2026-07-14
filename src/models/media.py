@@ -1,7 +1,7 @@
 from src.ext import db
 
-class Activity(db.Model):
-    __tablename__ = 'activities'
+class Media(db.Model):
+    __tablename__ = 'media'
 
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String)
@@ -9,11 +9,6 @@ class Activity(db.Model):
     datetime = db.Column(db.DateTime)
     img = db.Column(db.String, nullable = False)
     link = db.Column(db.String, nullable = True)
-
-    author_name = db.Column(db.String)
-    author_profession = db.Column(db.String)
-    author_image = db.Column(db.String)
-    author_biography = db.Column(db.Text)
 
 def __repr__(self):
     return self.title

@@ -1,1 +1,1 @@
-from src.endpoints.api import MemberDetail, MemberList, ActivityList, ActivityDetail, SliderList
+from src.endpoints.api import MemberList, ActivityList, ActivityDetail, SliderList, MediaDetail, MediaList

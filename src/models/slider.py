@@ -5,4 +5,5 @@ class Slider(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     img = db.Column(db.String, nullable = False)
+    alt = db.Column(db.String, nullable=False)
     show = db.Column(db.Boolean, default = True)

@@ -1,15 +1,15 @@
-from flask_admin.form.upload import ImageUploadField
-from src.admin_views.base import SecureModelView
+from flask_admin.form import ImageUploadField
 from flask import current_app
-from markupsafe import Markup
 from uuid import uuid4
 import os
 
+from src.admin_views.base import SecureModelView
 from src.admin_views.utils import _image_formatter
 
-class MemberView(SecureModelView):
+class MediaView(SecureModelView):
+
     form_overrides = {
-        "img": ImageUploadField,
+        "img": ImageUploadField
     }
 
     form_args = {

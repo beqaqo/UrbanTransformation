@@ -1,55 +1,31 @@
 from flask_restx import Resource
 
-from src.models.member import Member
-from src.models.activity import Activity
-from src.models.slider import Slider
+from src.models import Member, Activity, Slider, Media
 from src.ext import api
-from src.endpoints.models import activity_model, slider_model
+from src.endpoints.models import activities_model, activity_model, slider_model, member_model, media_model
 
 ns_members = api.namespace("members", path="/api/members")
 ns_activities = api.namespace("activities", path="/api/activities")
 ns_slider = api.namespace("slider", path="/api/slider")
+ns_media = api.namespace("media", path="/api/media")
+
 
 @ns_members.route("/")
 class MemberList(Resource):
+    @ns_members.marshal_with(member_model)
     def get(self):
         members = Member.query.all()
-        return [
-            {
-                "id": m.id,
-                "name": m.name,
-                "surname": m.surname,
-                "role": m.role,
-                "academical_degree": m.academical_degree,
-                "contribution": m.contribution,
-                "image": m.image,
-                "email": m.email
-            } for m in members
-        ]
-
-
-@ns_members.route("/<int:id>")
-class MemberDetail(Resource):
-    def get(self, id):
-        m = Member.query.get_or_404(id)
-        return {
-            "id": m.id,
-            "name": m.name,
-            "surname": m.surname,
-            "role": m.role,
-            "academical_degree": m.academical_degree,
-            "contribution": m.contribution,
-            "image": m.image,
-            "email": m.email
-        }
+        return members
 
 
 @ns_activities.route("/")
 class ActivityList(Resource):
-    @ns_activities.marshal_with(activity_model)
+    @ns_activities.marshal_with(activities_model)
     def get(self):
         activities = Activity.query.all()
+
         return activities
+
 
 @ns_activities.route("/<int:id>")
 class ActivityDetail(Resource):
@@ -65,3 +41,39 @@ class SliderList(Resource):
     def get(self):
         sliders = Slider.query.filter_by(show=True).all()
         return sliders
+
+
+@ns_media.route("/")
+class MediaList(Resource):
+    @ns_media.marshal_with(media_model)
+    def get(self):
+        media = Media.query.all()
+
+        return media
+
+
+@ns_media.route("/<int:id>")
+class MediaDetail(Resource):
+    def get(self, id):
+        media = Media.query.get_or_404(id)
+        if media:
+            recents = Media.query.filter(Media.id != media.id).order_by(Media.datetime.desc()).limit(5).all()
+
+        return_obj = [{
+            "id": media.id,
+            "title": media.title,
+            "description": media.description,
+            "link": media.link,
+            "img": media.img,
+            },
+            {"recents": [{
+                "id": recent.id,
+                "title": recent.title,
+                "description": recent.description,
+                "link": recent.link,
+                "img": recent.img,
+            } for recent in recents
+            ]},
+        ]
+
+        return return_obj

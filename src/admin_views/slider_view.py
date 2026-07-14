@@ -4,6 +4,8 @@ from flask import current_app
 from uuid import uuid4
 import os
 
+from src.admin_views.utils import _image_formatter
+
 class SliderView(SecureModelView):
     form_overrides = {
         "img": ImageUploadField
@@ -16,3 +18,5 @@ class SliderView(SecureModelView):
             "namegen": lambda obj, file: f"{uuid4().hex}{os.path.splitext(file.filename)[1]}"
         }
     }
+
+    column_formatters = {'img': _image_formatter}
