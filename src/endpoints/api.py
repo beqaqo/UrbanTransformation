@@ -4,11 +4,10 @@ from src.models import Member, Activity, Slider, Media
 from src.ext import api
 from src.endpoints.models import activities_model, activity_model, slider_model, member_model, media_model
 
-ns_members = api.namespace("members", path="/api/members")
-ns_activities = api.namespace("activities", path="/api/activities")
-ns_slider = api.namespace("slider", path="/api/slider")
-ns_media = api.namespace("media", path="/api/media")
-
+ns_members = api.namespace("members", path="/<lang>/api/members")
+ns_activities = api.namespace("activities", path="/<lang>/api/activities")
+ns_slider = api.namespace("slider", path="/<lang>/api/slider")
+ns_media = api.namespace("media", path="/<lang>/api/media")
 
 @ns_members.route("/")
 class MemberList(Resource):

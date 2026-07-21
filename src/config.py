@@ -5,3 +5,4 @@ class Config(object):
     SECRET_KEY = 'AWDWQDASDSAFHSFJWIasjdalskfjqwoijf@1234098'
     BASE_DIRECTORY = path.abspath(path.dirname(__file__))
     UPLOAD_PATH = path.join(BASE_DIRECTORY, "static")
+    SUPPORTED_LANGS = ('ka', 'en',)

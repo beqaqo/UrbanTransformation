@@ -1,10 +1,25 @@
 from flask_admin.form import ImageUploadField
+from flask_admin.model.form import InlineFormAdmin
 from flask import current_app
+from wtforms import SelectField
 from uuid import uuid4
 import os
 
 from src.admin_views.base import SecureModelView
+from src.models import MediaTranslation
+from src.config import Config
 from src.admin_views.utils import _image_formatter
+
+class MediaTranslationInline(InlineFormAdmin):
+    form_overrides = {
+        'lang': SelectField
+    }
+    form_args = {
+        'lang': {
+            'label': 'Language',
+            'choices': [(l, l) for l in Config.SUPPORTED_LANGS],  # choices, not options
+        }
+    }
 
 class MediaView(SecureModelView):
 
@@ -21,3 +36,5 @@ class MediaView(SecureModelView):
     }
 
     column_formatters = {'img': _image_formatter}
+
+    inline_models = [MediaTranslationInline(MediaTranslation)]
