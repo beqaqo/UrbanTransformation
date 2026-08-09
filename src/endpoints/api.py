@@ -1,8 +1,9 @@
-from flask_restx import Resource
+from flask_restx import Resource, reqparse
+from flask import request
 
-from src.models import Member, Activity, Slider, Media
+from src.models import Member, Activity, Slider, Media, ActivityCategory
 from src.ext import api
-from src.endpoints.models import activities_model, activity_model, slider_model, member_model, media_model
+from src.endpoints.models import activities_model, activity_model, slider_model, member_model, media_model, category_model
 
 ns_members = api.namespace("members", path="/<lang>/api/members")
 ns_activities = api.namespace("activities", path="/<lang>/api/activities")
@@ -16,13 +17,32 @@ class MemberList(Resource):
         members = Member.query.all()
         return members
 
+@ns_activities.route("/categories")
+class CategoryList(Resource):
+    @ns_activities.marshal_with(category_model)
+    def get(self):
+        categories = ActivityCategory.query.all()
+
+        return categories
+
+activities_parser = reqparse.RequestParser()
+activities_parser.add_argument('category_id', type=int, location='args', required=False)
 
 @ns_activities.route("/")
 class ActivityList(Resource):
+
+    @ns_activities.expect(activities_parser)
     @ns_activities.marshal_with(activities_model)
     def get(self):
-        activities = Activity.query.all()
+        args = activities_parser.parse_args()
+        category_id = args.get('category_id')
 
+        query = Activity.query
+
+        if category_id is not None:
+            query = query.filter_by(category_id=category_id)
+
+        activities = query.all()
         return activities
 
 

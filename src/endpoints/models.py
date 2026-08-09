@@ -28,12 +28,18 @@ slider_model = api.model('slider',{
     'img': fields.String
 })
 
+category_model = api.model('category', {
+    'id': fields.Integer,
+    'category_name': fields.String(attribute=get_translated('category_name')),
+})
+
 activities_model = api.model('activities',{
     'id': fields.Integer,
     'title': fields.String(attribute=get_translated('title')),
     'datetime': fields.DateTime,
     'img': fields.String,
     'description': fields.String(attribute=get_translated('description')),
+    'category': fields.String(attribute=get_translated('category'))
 })
 
 activity_model = api.model('activity', {
