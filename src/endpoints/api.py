@@ -1,14 +1,14 @@
 from flask_restx import Resource, reqparse
-from flask import request
 
-from src.models import Member, Activity, Slider, Media, ActivityCategory
+from src.models import Member, Activity, Slider, Media, ActivityCategory, Blog
 from src.ext import api
-from src.endpoints.models import activities_model, activity_model, slider_model, member_model, media_model, category_model
+from src.endpoints.models import activities_model, activity_model, slider_model, member_model, media_model, category_model, blog_model
 
 ns_members = api.namespace("members", path="/<lang>/api/members")
 ns_activities = api.namespace("activities", path="/<lang>/api/activities")
 ns_slider = api.namespace("slider", path="/<lang>/api/slider")
 ns_media = api.namespace("media", path="/<lang>/api/media")
+ns_blog = api.namespace("blog", path="/<lang>/api/blog")
 
 @ns_members.route("/")
 class MemberList(Resource):
@@ -96,3 +96,39 @@ class MediaDetail(Resource):
         ]
 
         return return_obj
+
+@ns_blog.route("/")
+class BlogList(Resource):
+    @ns_media.marshal_with(blog_model)
+    def get(self):
+        blog = Blog.query.all()
+
+        return blog
+
+
+@ns_blog.route("/<int:id>")
+class BlogDetail(Resource):
+    def get(self, id):
+        blog = Blog.query.get_or_404(id)
+        if blog:
+            recents = Blog.query.filter(Blog.id != blog.id).order_by(Blog.datetime.desc()).limit(5).all()
+
+        return_obj = [{
+            "id": blog.id,
+            "title": blog.title,
+            "description": blog.description,
+            "link": blog.link,
+            "img": blog.img,
+            },
+            {"recents": [{
+                "id": recent.id,
+                "title": recent.title,
+                "description": recent.description,
+                "link": recent.link,
+                "img": recent.img,
+            } for recent in recents
+            ]},
+        ]
+
+        return return_obj
+

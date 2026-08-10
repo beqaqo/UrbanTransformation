@@ -63,3 +63,12 @@ media_model = api.model('media',{
     'description': fields.String(attribute=get_translated('description')),
     'link': fields.String,
 })
+
+blog_model = api.model('blog',{
+    'id': fields.Integer,
+    'title': fields.String(attribute=get_translated('title')),
+    'datetime': fields.DateTime,
+    'img': fields.String,
+    'description': fields.String(attribute=get_translated('description')),
+    'link': fields.String,
+})

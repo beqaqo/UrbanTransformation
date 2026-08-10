@@ -2,9 +2,9 @@ from flask import Flask, g, abort
 from src.ext import db, migrate, login_manager, admin, api, babel
 from src.config import Config
 from src.commands import init_db, populate_db
-from src.models import Activity, ActivityTranslation, ActivityCategory, CategoryTranslation, Member, User, Slider, Media
+from src.models import Activity, ActivityTranslation, ActivityCategory, CategoryTranslation, Member, User, Slider, Media, Blog
 from src.admin_views.base import SecureIndexView
-from src.endpoints import MemberList, ActivityList, ActivityDetail, SliderList, MediaList, MediaDetail
+from src.endpoints import MemberList, ActivityList, ActivityDetail, SliderList, MediaList, MediaDetail, BlogList, BlogDetail
 from src.views import auth_blueprint
 from src.admin_views import add_admin_views
 
