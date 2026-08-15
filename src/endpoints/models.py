@@ -72,3 +72,31 @@ blog_model = api.model('blog',{
     'description': fields.String(attribute=get_translated('description')),
     'link': fields.String,
 })
+
+about_us_model = api.model('about-us', {
+    'id': fields.Integer,
+    'title_img': fields.String,
+    'title_text': fields.String(attribute=get_translated('title_text')),
+    'about_the_laboratory_text': fields.String(attribute=get_translated('about_the_laboratory_text')),
+    'our_collection_text': fields.String(attribute=get_translated('our_collection_text')),
+    'mission_img': fields.String,
+    'our_mission_text': fields.String(attribute=get_translated('our_mission_text')),
+})
+
+results_model = api.model('results', {
+    'id': fields.Integer,
+    'title': fields.String(attribute=get_translated('title'))
+})
+
+timeline_model = api.model('timeline', {
+    'id': fields.Integer,
+    'img': fields.String,
+    'year': fields.Integer(),
+    'description': fields.String(attribute=get_translated('description'))
+})
+
+result_detail_model = api.model('results-detail', {
+    'id': fields.Integer,
+    'title': fields.String(attribute=get_translated('title')),
+    'timelines': fields.List(fields.Nested(timeline_model)),
+})
