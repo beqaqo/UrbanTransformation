@@ -60,5 +60,3 @@ def create_app():
     register_blueprints(app)
     register_commands(app)
     return app
-
-#TODO: disable CORS, or make it accassible for everyone
