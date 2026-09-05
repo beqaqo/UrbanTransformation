@@ -1,5 +1,5 @@
 from flask import Flask, g, abort
-from src.ext import db, migrate, login_manager, admin, api, babel
+from src.ext import db, migrate, login_manager, admin, api, babel, cors
 from src.config import Config
 from src.commands import init_db, populate_db
 from src.models import Activity, ActivityTranslation, ActivityCategory, CategoryTranslation, Member, User, Slider, Media, Blog
@@ -27,6 +27,7 @@ def register_extensions(app):
     admin.__init__(app, name="UrbanTransformation Panel", index_view=SecureIndexView())
     add_admin_views(admin, db)
 
+    cors.init_app(app)
     api.init_app(app)
 
 
@@ -59,3 +60,5 @@ def create_app():
     register_blueprints(app)
     register_commands(app)
     return app
+
+#TODO: disable CORS, or make it accassible for everyone
