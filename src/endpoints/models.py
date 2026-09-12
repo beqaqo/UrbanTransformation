@@ -64,6 +64,16 @@ media_model = api.model('media',{
     'link': fields.String,
 })
 
+media_detail = api.model('media',{
+    'id': fields.Integer,
+    'title': fields.String(attribute=get_translated('title')),
+    'datetime': fields.DateTime,
+    'img': fields.String,
+    'description': fields.String(attribute=get_translated('description')),
+    'link': fields.String,
+    'recent': fields.List(fields.Nested(media_model)),
+})
+
 blog_model = api.model('blog',{
     'id': fields.Integer,
     'title': fields.String(attribute=get_translated('title')),
@@ -72,6 +82,17 @@ blog_model = api.model('blog',{
     'description': fields.String(attribute=get_translated('description')),
     'link': fields.String,
 })
+
+blog_detail = api.model('blog-detail', {
+    'id': fields.Integer,
+    'title': fields.String(attribute=get_translated('title')),
+    'datetime': fields.DateTime,
+    'img': fields.String,
+    'description': fields.String(attribute=get_translated('description')),
+    'link': fields.String,
+    'recent': fields.List(fields.Nested(blog_model)),
+    }
+)
 
 about_us_model = api.model('about-us', {
     'id': fields.Integer,
@@ -85,7 +106,8 @@ about_us_model = api.model('about-us', {
 
 results_model = api.model('results', {
     'id': fields.Integer,
-    'title': fields.String(attribute=get_translated('title'))
+    'title': fields.String(attribute=get_translated('title')),
+    'nav_title': fields.String(attribute=get_translated('nav_title')),
 })
 
 timeline_model = api.model('timeline', {
@@ -98,5 +120,6 @@ timeline_model = api.model('timeline', {
 result_detail_model = api.model('results-detail', {
     'id': fields.Integer,
     'title': fields.String(attribute=get_translated('title')),
+    'pdf': fields.String,
     'timelines': fields.List(fields.Nested(timeline_model)),
 })

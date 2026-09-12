@@ -5,6 +5,7 @@ class Result(BaseModel):
     __tablename__ = 'results'
 
     id = db.Column(db.Integer, primary_key=True)
+    pdf = db.Column(db.String(), nullable=True)
 
     translations = db.relationship(
         'ResultTranslation',
@@ -25,6 +26,7 @@ class ResultTranslation(BaseModel):
     lang = db.Column(db.String(5), nullable=False)
 
     title = db.Column(db.String)
+    nav_title = db.Column(db.String)
 
     __table_args__ = (
         db.UniqueConstraint('result_id', 'lang', name='uq_result_lang'),

@@ -11,6 +11,10 @@ class Media(BaseModel):
 
     translations = db.relationship('MediaTranslation', back_populates='media')
 
+    @property
+    def recent(self):
+        return Media.query.filter(Media.id != self.id).order_by(Media.datetime.desc()).limit(5).all()
+
 class MediaTranslation(BaseModel):
     __tablename__ = 'media_translation'
 

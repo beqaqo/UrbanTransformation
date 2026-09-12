@@ -3,7 +3,8 @@ from flask_restx import Resource, reqparse
 from src.models import Member, Activity, Slider, Media, ActivityCategory, Blog, AboutUs, Result
 from src.ext import api
 from src.endpoints.models import activities_model, activity_model, slider_model, member_model, \
-    media_model, category_model, blog_model, about_us_model, results_model, result_detail_model
+    media_model, media_detail, category_model, blog_model, blog_detail, about_us_model, \
+    results_model, result_detail_model
 
 ns_members = api.namespace("members", path="/<lang>/api/members")
 ns_activities = api.namespace("activities", path="/<lang>/api/activities")
@@ -76,29 +77,12 @@ class MediaList(Resource):
 
 @ns_media.route("/<int:id>")
 class MediaDetail(Resource):
+
+    @ns_media.marshal_with(media_detail)
     def get(self, id):
         media = Media.query.get_or_404(id)
-        if media:
-            recents = Media.query.filter(Media.id != media.id).order_by(Media.datetime.desc()).limit(5).all()
 
-        return_obj = [{
-            "id": media.id,
-            "title": media.title,
-            "description": media.description,
-            "link": media.link,
-            "img": media.img,
-            },
-            {"recents": [{
-                "id": recent.id,
-                "title": recent.title,
-                "description": recent.description,
-                "link": recent.link,
-                "img": recent.img,
-            } for recent in recents
-            ]},
-        ]
-
-        return return_obj
+        return media
 
 @ns_blog.route("/")
 class BlogList(Resource):
@@ -111,29 +95,12 @@ class BlogList(Resource):
 
 @ns_blog.route("/<int:id>")
 class BlogDetail(Resource):
+
+    @ns_blog.marshal_with(blog_detail)
     def get(self, id):
         blog = Blog.query.get_or_404(id)
-        if blog:
-            recents = Blog.query.filter(Blog.id != blog.id).order_by(Blog.datetime.desc()).limit(5).all()
 
-        return_obj = [{
-            "id": blog.id,
-            "title": blog.title,
-            "description": blog.description,
-            "link": blog.link,
-            "img": blog.img,
-            },
-            {"recents": [{
-                "id": recent.id,
-                "title": recent.title,
-                "description": recent.description,
-                "link": recent.link,
-                "img": recent.img,
-            } for recent in recents
-            ]},
-        ]
-
-        return return_obj
+        return blog
 
 @ns_about_us.route("/")
 class AboutUsPage(Resource):

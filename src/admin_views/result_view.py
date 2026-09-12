@@ -1,4 +1,4 @@
-from flask_admin.form import ImageUploadField
+from flask_admin.form import ImageUploadField, FileUploadField
 from flask_admin.model.form import InlineFormAdmin
 from flask import current_app
 from markupsafe import Markup
@@ -69,4 +69,21 @@ class ResultTranslationInline(InlineFormAdmin):
     }
 
 class ResultView(SecureModelView):
+    column_list = {'name'}
+    column_formatters = {
+        'name': lambda v,c,m,n: f'{m.translations[0].title}'
+    }
+
+    form_overrides = {
+        'pdf': FileUploadField,
+    }
+
+    form_args = {
+        'pdf': {
+            "base_path": lambda: current_app.config["UPLOAD_PATH"],
+            "relative_path": "pdf/",
+            "namegen": lambda obj, file: f"{uuid4().hex}{os.path.splitext(file.filename)[1]}"
+        }
+    }
+
     inline_models = [ResultTranslationInline(ResultTranslation),TimelineInline(Timeline),]

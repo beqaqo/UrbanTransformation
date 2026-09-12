@@ -9,6 +9,10 @@ class Blog(BaseModel):
     img = db.Column(db.String, nullable = False)
     link = db.Column(db.String, nullable = True)
 
+    @property
+    def recent(self):
+        return Blog.query.filter(Blog.id != self.id).order_by(Blog.datetime.desc()).limit(5).all()
+
     translations = db.relationship('BlogTranslation', back_populates='blog')
 
 class BlogTranslation(BaseModel):
