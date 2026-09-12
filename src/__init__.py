@@ -27,7 +27,10 @@ def register_extensions(app):
     admin.__init__(app, name="UrbanTransformation Panel", index_view=SecureIndexView())
     add_admin_views(admin, db)
 
-    cors.init_app(app)
+    cors.init_app(
+        app,
+        resources={r"/*": {"origins": "*"}}
+    )
     api.init_app(app)
 
 
