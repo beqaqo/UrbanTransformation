@@ -29,7 +29,10 @@ def register_extensions(app):
 
     cors.init_app(
         app,
-        resources={r"/*": {"origins": "*"}}
+        origins=[
+            "http://localhost:3000",
+            "https://urbanization-gamma.vercel.app",
+        ]
     )
     api.init_app(app)
 
