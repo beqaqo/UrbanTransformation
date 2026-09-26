@@ -29,7 +29,9 @@ def register_extensions(app):
 
     cors.init_app(
         app,
-        origins="*"
+        resources={r"/*": {"origins": "*"}},
+        allow_headers="*",
+        methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"]
     )
     api.init_app(app)
 
